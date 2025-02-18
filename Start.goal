@@ -4,8 +4,5 @@ Start
 TlDraw
 - render template /ui/tldraw.template
 
-OnBuilderStart
-- run npm app, install "tldraw", set / as base path
-
 OpenVsCode
 - terminal app: "code", param:"%path%", dont show

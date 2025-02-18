@@ -9,12 +9,12 @@
       "ModuleType": null,
       "Name": null,
       "Description": null,
-      "PrFileName": null,
-      "RelativePrPath": null,
+      "PrFileName": "Events.pr",
+      "RelativePrPath": ".build\\events\\external\\plang\\Events\\Events.pr",
       "Indent": 0,
       "Execute": true,
       "RunOnce": false,
-      "Generated": "2025-02-06T20:01:26.6344093+00:00",
+      "Generated": "2025-02-18T14:24:10.2807638+00:00",
       "WaitForExecution": true,
       "LoggerLevel": null,
       "ErrorHandlers": null,
@@ -40,12 +40,15 @@
         "RunOnlyOnStartParameter": [
           "--debug"
         ],
-        "OnErrorContinueNextStep": false
+        "OnErrorContinueNextStep": false,
+        "ErrorKey": null,
+        "ErrorMessage": null,
+        "StatusCode": null,
+        "ExceptionType": null
       },
       "IsEvent": true,
       "Hash": null,
-      "BuilderVersion": null,
-      "PrFile": null
+      "BuilderVersion": null
     },
     {
       "Text": "before goal ends, include private goals, call !/events/external/plang/Runtime/SendDebug, parameter --debug",
@@ -53,12 +56,12 @@
       "ModuleType": null,
       "Name": null,
       "Description": null,
-      "PrFileName": null,
-      "RelativePrPath": null,
+      "PrFileName": "Events.pr",
+      "RelativePrPath": ".build\\events\\external\\plang\\Events\\Events.pr",
       "Indent": 0,
       "Execute": true,
       "RunOnce": false,
-      "Generated": "2025-02-06T20:01:26.6452299+00:00",
+      "Generated": "2025-02-18T14:24:10.2940065+00:00",
       "WaitForExecution": true,
       "LoggerLevel": null,
       "ErrorHandlers": null,
@@ -84,15 +87,18 @@
         "RunOnlyOnStartParameter": [
           "--debug"
         ],
-        "OnErrorContinueNextStep": false
+        "OnErrorContinueNextStep": false,
+        "ErrorKey": null,
+        "ErrorMessage": null,
+        "StatusCode": null,
+        "ExceptionType": null
       },
       "IsEvent": true,
       "Hash": null,
-      "BuilderVersion": null,
-      "PrFile": null
+      "BuilderVersion": null
     },
     {
-      "Text": "on app start, call !/events/external/plang/Runtime/Runtime, parameter --debug",
+      "Text": "on step error, exception type: PLang.Exceptions.InvalidInstructionFileException, call !/events/external/plang/Runtime/HandleBadInstructionFile",
       "Comment": null,
       "ModuleType": null,
       "Name": null,
@@ -102,7 +108,7 @@
       "Indent": 0,
       "Execute": true,
       "RunOnce": false,
-      "Generated": "2025-02-06T20:01:26.6515366+00:00",
+      "Generated": "2025-02-18T14:22:15.8253731+00:00",
       "WaitForExecution": true,
       "LoggerLevel": null,
       "ErrorHandlers": null,
@@ -114,12 +120,102 @@
       "LlmRequest": null,
       "EventBinding": {
         "EventType": "After",
-        "EventScope": "StartOfApp",
+        "EventScope": "StepError",
         "GoalToBindTo": {
           "Value": "*"
         },
         "GoalToCall": {
-          "Value": "/events/external/plang/Runtime/Runtime"
+          "Value": "/events/external/plang/Runtime/HandleBadInstructionFile"
+        },
+        "IncludePrivate": false,
+        "StepNumber": null,
+        "StepText": null,
+        "WaitForExecution": true,
+        "RunOnlyOnStartParameter": null,
+        "OnErrorContinueNextStep": false,
+        "ErrorKey": null,
+        "ErrorMessage": null,
+        "StatusCode": null,
+        "ExceptionType": "PLang.Exceptions.InvalidInstructionFileException"
+      },
+      "IsEvent": true,
+      "Hash": null,
+      "BuilderVersion": null
+    },
+    {
+      "Text": "on step error key:\"PrFileNotFound\", call PrFileNotFound",
+      "Comment": null,
+      "ModuleType": null,
+      "Name": null,
+      "Description": null,
+      "PrFileName": null,
+      "RelativePrPath": null,
+      "Indent": 0,
+      "Execute": true,
+      "RunOnce": false,
+      "Generated": "2025-02-18T14:22:15.8314759+00:00",
+      "WaitForExecution": true,
+      "LoggerLevel": null,
+      "ErrorHandlers": null,
+      "CacheHandler": null,
+      "CancellationHandler": null,
+      "Custom": {},
+      "Number": 3,
+      "LineNumber": 5,
+      "LlmRequest": null,
+      "EventBinding": {
+        "EventType": "After",
+        "EventScope": "StepError",
+        "GoalToBindTo": {
+          "Value": "*"
+        },
+        "GoalToCall": {
+          "Value": "PrFileNotFound"
+        },
+        "IncludePrivate": false,
+        "StepNumber": null,
+        "StepText": null,
+        "WaitForExecution": true,
+        "RunOnlyOnStartParameter": null,
+        "OnErrorContinueNextStep": false,
+        "ErrorKey": "PrFileNotFound",
+        "ErrorMessage": null,
+        "StatusCode": null,
+        "ExceptionType": null
+      },
+      "IsEvent": true,
+      "Hash": null,
+      "BuilderVersion": null
+    },
+    {
+      "Text": "on step error, call DebugErrorInIde, only when args --debug",
+      "Comment": null,
+      "ModuleType": null,
+      "Name": null,
+      "Description": null,
+      "PrFileName": null,
+      "RelativePrPath": null,
+      "Indent": 0,
+      "Execute": true,
+      "RunOnce": false,
+      "Generated": "2025-02-18T14:22:15.8390955+00:00",
+      "WaitForExecution": true,
+      "LoggerLevel": null,
+      "ErrorHandlers": null,
+      "CacheHandler": null,
+      "CancellationHandler": null,
+      "Custom": {},
+      "Number": 4,
+      "LineNumber": 6,
+      "LlmRequest": null,
+      "EventBinding": {
+        "EventType": "After",
+        "EventScope": "StepError",
+        "GoalToBindTo": {
+          "Value": "*"
+        },
+        "GoalToCall": {
+          "Value": "DebugErrorInIde"
         },
         "IncludePrivate": false,
         "StepNumber": null,
@@ -128,12 +224,15 @@
         "RunOnlyOnStartParameter": [
           "--debug"
         ],
-        "OnErrorContinueNextStep": false
+        "OnErrorContinueNextStep": false,
+        "ErrorKey": null,
+        "ErrorMessage": null,
+        "StatusCode": null,
+        "ExceptionType": null
       },
       "IsEvent": true,
       "Hash": null,
-      "BuilderVersion": null,
-      "PrFile": null
+      "BuilderVersion": null
     }
   ],
   "SubGoals": [],

@@ -22,7 +22,7 @@
       "CancellationHandler": null,
       "Custom": {},
       "Number": 0,
-      "LineNumber": 11,
+      "LineNumber": 8,
       "LlmRequest": {
         "temperature": 0.0,
         "top_p": 0.0,
@@ -71,86 +71,8 @@
       },
       "EventBinding": null,
       "IsEvent": false,
-      "Hash": "850a5fc808abbd81d8c10a2b9d2abb9cd549763d46b2e9a767ca50892a01964c",
-      "BuilderVersion": null,
-      "PrFile": {
-        "Action": {
-          "FunctionName": "RunTerminal",
-          "Parameters": [
-            {
-              "Type": "String",
-              "Name": "appExecutableName",
-              "Value": "code"
-            },
-            {
-              "Type": "List`1<String>",
-              "Name": "parameters",
-              "Value": [
-                "%path%"
-              ]
-            },
-            {
-              "Type": "Boolean",
-              "Name": "hideTerminal",
-              "Value": true
-            }
-          ],
-          "ReturnValues": null
-        },
-        "Text": "terminal app: \"code\", param:\"%path%\", dont show",
-        "Reload": false,
-        "LlmRequest": {
-          "temperature": 0.0,
-          "top_p": 0.0,
-          "frequencyPenalty": 0.0,
-          "presencePenalty": 0.0,
-          "maxLength": 4000,
-          "llmResponseType": "json",
-          "scheme": "{\n\t\"FunctionName\": string,\n\t\"Parameters\": [{\n\t\"Type\": string,\n\t\"Name\": string,\n\t\"Value\"?: object\n}],\n\t\"ReturnValues\"?: [{\n\t\"Type\": string,\n\t\"VariableName\": string\n}] = null\n}",
-          "model": "gpt-4o",
-          "promptMessage": [
-            {
-              "role": "system",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Your job is: \r\n1. Parse user intent\r\n2. Map the intent to one of C# function provided to you\r\n3. Return a valid JSON\r\n\r\nVariable is defined with starting and ending %, e.g. %filePath%. \r\n%Variable% MUST be wrapped in quotes(\") in json response, e.g. { \"name\":\"%name%\" }\r\nVariables should not be changed, they can include dot(.) and parentheses()\r\nKeep \\n, \\r, \\t that are submitted to you for string variables\r\nParameter.Value that is type String MUST be without escaping quotes. See == QuoteExample ==\r\n\r\n== QuoteExample ==\r\nget url \"http://example.org\" => Value: \"http://example.org\"\r\nwrite out 'Hello world' => Value: \"Hello world\"\r\n== QuoteExample ==\r\n\r\nIf there is some api key, settings, config replace it with %Settings.Get(\"settingName\", \"defaultValue\", \"Explain\")% \r\n- settingName would be the api key, config key, \r\n- defaultValue for settings is the usual value given, make it \"\" if no value can be default\r\n- Explain is an explanation about the setting that novice user can understand.\r\n\r\n\r\n\r\nJSON scheme information\r\nFunctionName: Name of the function to use from list of functions, if no function matches set as \"N/A\"\r\nParameters: List of parameters that are needed according to the user intent.\r\n- Type: the object type in c#\r\n- Name: name of the variable\r\n- Value: \"%variable%\" or hardcode string that should be used\r\nReturnValue rules\r\n- Only if the function returns a value AND if user defines %variable% to write into, e.g. ' write into %data%' or 'into %result%', or simliar intent to write return value into variable\r\n- If no %variable% is defined then set as null."
-                },
-                {
-                  "type": "text",
-                  "text": "You MUST respond in JSON, scheme:\r\n {\n\t\"FunctionName\": string,\n\t\"Parameters\": [{\n\t\"Type\": string,\n\t\"Name\": string,\n\t\"Value\"?: object\n}],\n\t\"ReturnValues\"?: [{\n\t\"Type\": string,\n\t\"VariableName\": string\n}] = null\n}"
-                }
-              ]
-            },
-            {
-              "role": "assistant",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "## functions available starts ##\r\nRead(String variableName)  : void\nRunTerminal(String appExecutableName, List`1<String>? parameters, String? pathToWorkingDirInTerminal, String? dataOutputVariable, String? errorDebugInfoOutputVariable, String? dataStreamDelta, String? debugErrorStreamDelta, Boolean? hideTerminal = False)  : void\r\n## functions available ends ##\r\n## defined variables ##\r\npath (type:object), \r\n## defined variables ##"
-                },
-                {
-                  "type": "text",
-                  "text": "Remove % around dataOutputVariable and errorDebugInfoOutputVariable"
-                }
-              ]
-            },
-            {
-              "role": "user",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "terminal app: \"code\", param:\"%path%\", dont show"
-                }
-              ]
-            }
-          ],
-          "type": "PLang.Modules.TerminalModule.Builder",
-          "caching": true,
-          "RawResponse": "```json\n{\n\t\"FunctionName\": \"RunTerminal\",\n\t\"Parameters\": [\n\t\t{\n\t\t\t\"Type\": \"String\",\n\t\t\t\"Name\": \"appExecutableName\",\n\t\t\t\"Value\": \"code\"\n\t\t},\n\t\t{\n\t\t\t\"Type\": \"List`1<String>\",\n\t\t\t\"Name\": \"parameters\",\n\t\t\t\"Value\": [\"%path%\"]\n\t\t},\n\t\t{\n\t\t\t\"Type\": \"Boolean\",\n\t\t\t\"Name\": \"hideTerminal\",\n\t\t\t\"Value\": true\n\t\t}\n\t],\n\t\"ReturnValues\": null\n}\n```"
-        },
-        "RunOnBuild": false
-      }
+      "Hash": "6a9980331b371b70f2bb1f6699a72eb6a4c85c4988cb145fa3dcea37f7c4640c",
+      "BuilderVersion": null
     }
   ],
   "SubGoals": [],
@@ -165,7 +87,7 @@
   "GoalInfo": null,
   "Injections": [],
   "Signature": null,
-  "Hash": "8cb551f87b896e223f24949a1a7b7f889f332be62b4899518918d11a704b82e0",
+  "Hash": "d5f6b4d8c517b4abe26629b6db2839baa18be13e731ff6d34501075f8377872f",
   "IncomingVariablesRequired": [
     "path"
   ]

@@ -1,6 +1,6 @@
 BuildGui
 - if %sketch% is empty then 
-    - read text file news.txt, write to %sketch%
+    - read sketch.png as base64, include data, write to %sketch%
     - read file desc.txt, write to %desc%
 - write out "<li>Building description of app</li>", buffer
 - read llm/buildDescriptionSystem.txt, write to %system%
@@ -30,12 +30,11 @@ BuildGui
                 fileName:string, description:string, html:string,
                     goalsToCallBeforeRender: [{name:string, description:string}],
                     goalsToCall:[{name:string, parameters:string[], outputTarget:string, domOperation:string}], 
-                    modules:[{fileName:string, description:string, html:string, goalsToCallOnLoad: object[]?, goalsToCall:object[]?, modules:object[]?}]
+                    modules:[{fileName:string, description:string, html:string, goalsToCallBeforeRender: object[]?, goalsToCall:object[]?, modules:object[]?}]
                 }
         write to %uiFiles%
 - write %uiFiles% to text file %folderPath%/.debug/uiFile.json        
 - call SaveUiFiles item=%uiFiles%
-/- call ValidateUIFile item=%uiFiles%
 - read llm/plangexample2.txt, dont load variables, write to %examples%
 - read llm/buildLogicSystem.txt, load vars, write to %logicSystem%
 - write %logicSystem% to %folderPath%/.debug/logicSystem.txt, overwrite
@@ -54,39 +53,11 @@ BuildGui
 
 SaveUiFiles
 - save %item.html% to %folderPath%/%item.fileName%
-- foreach %item.modules%, call SaveUiFiles
+- foreach %item.modules%, call SaveUiFiles %item%
 
 SavePlangFiles
 - save %item.plangCode% to %folderPath%/%item.fileName%
-- foreach %item.modules%, call SavePlangFiles
 
 ClearHtmlFromUiFiles
 - foreach %item.modules%, call ClearHtmlFromUiFiles
-/- set %item.html% = "[not provided]", %item.modules% = "[]"
 - set append to %htmlInfo% list = %item%
-
-ValidateUIFile
-- read %folderPath%/%item.fileName%, write to %html%
-- read llm/buildValidateUISystem.txt, write to %validateUISystem%
-- [llm] system: %validateUISystem%
-        user: <html>%html%<html><goals>%item.goals%<goals>
-        scheme: {
-                    modified:bool,
-                    result?: {
-                    fileName:string, description:string, html:string, 
-                        goals:[{name:string, parameters:object, target:string, operation:string, render:string}], 
-                        modules:[{fileName:string, description:string, html:string, goals:object?, modules:object?}]
-                    }
-        }
-        write to %modifiedResult%
-- save %modifiedResult% to %folderPath%/%item.fileName%-modified.json           
-- if %modifiedResult.modified% then
-    - call SaveUiFiles item=%modifiedResult.result%
-- foreach %item.modules%, call ValidateUIFile
-        
-BuildGui2
-- set %folderPath% = "C:\Users\Ingi Gauti\source\repos\apps\Builder\.output\Daily PDF Meeting Monitor"
-- write out "<li>Building description of app</li>", buffer
-- write out "<li>Building database of app</li>", buffer
-- write out "<li>Building User interface of app</li>", buffer
-- write out "<button class='bg-blue-500 text-white font-semibold rounded-lg px-6 py-2 hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 focus:outline-none' data-path="%folderPath%" onclick="callGoal('OpenVsCode', { path:this.dataset.path })">Open VS Code</button>", buffer

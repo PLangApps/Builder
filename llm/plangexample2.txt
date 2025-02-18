@@ -11,6 +11,8 @@
 - insert into tasks, %description%, %due_date%, is_complete=%isDone%, write to %id% 
 <llm_help>This return 1 row and %name% and %address% variables are available<llm_help>
 - select name, address from users where id=%id%, return 1 row 
+<llm_help>using return 1 row is usefull when aggregating in sql, such as count, avg, etc. This allows the plang code to access %total%<llm_help>
+- select count(*) as total from users, return 1 row
 <llm_help>use begin and end transaction when doing multiple db execution that are grouped together
     NEVER use begin or end transaction for 1 sql statement<llm_help>
 - begin transaction
@@ -42,18 +44,20 @@
 call goal is available as standalone, in if statements and loop/foreach/for/go through statements
 <llm_help>
 - set %name% = "John"
-- call goal ProcessUser user=%item% <llm_help>%name% will be accessable inside ProcessUser<llm_help>
+- call goal ProcessUser user=%item% <llm_help>%name% does not to be sent to ProcessUser, it will be accessable inside ProcessUser since variables are global<llm_help>
 - call goal DoDailyTask
 ### calling goal ###
 
-### if conditions ###
-<llm_help>if condition always calls a goal. Any variable available in goal will be available in goal being called<llm_help>
+### conditions ###
+<llm_help>
+if condition always calls a goal. Any variable available in goal will be available in goal being called
+<llm_help>
 - if %name% contains "John" (case insentive) then call ProcessName address=%item%
 - if %age% between 18 and 99 then call goal IsAllowed isOver=true, else call goal IsNotAllowed %age%
 - if %list.Count% > 0 then call ListNotEmpty, else call ListIsEmpty
 <llm_help>this will call the goal NameIsEmpty and send a parameter %age% into it. Naming the parameter is not needed if it's the same as variable<llm_help>
 - if %name% is empty then call NameIsEmpty %age% 
-### if conditions ###
+### conditions ###
 
 ### for statements ###
 <llm_help>
@@ -63,14 +67,28 @@ for statement defines 4 variables(%list%, %item%, %position%, %listCount%) autom
 <llm_help>
 - foreach %files%, call ProcessFile
 <llm_help>
-it is possible to change the name of those variable to be used in the calling goal, here instead of %item%, the variable will be %product%
+it is possible to change the name of those variable to be used in the calling goal, here instead of %item%, the variable will be %product% so in WorkOnList goal we will use %product%
+or when going through those files, the item becomes %file% so in ProcessFile we will use %file%
 <llm_help>
+LoopExample
 - go through %products%, call WorkOnList item=%product%
+- foreach %files%, call ProcessFile item=%file%
+
+WorkOnList
+- write out %product.name%
+
+ProcessFile
+- read %file%, into %content%
+
 ### for statements ###
 
 
 
 ### http (GET, POST, DELETE, PATCH, PUT) ###
+<llm_help>
+When doing http request to external services, use your knowledge to build the url, when user specific part of url is needed such as api keys, tokens, etc. use %Settings.XXX% where XXX is a nice name for the api.
+<llm_help>
+
 - get http://example.org, write to %content%
 <llm_help> get with caching<llm_help>
 - get http://example.org, write to %content%
@@ -120,24 +138,19 @@ it is possible to change the name of those variable to be used in the calling go
 <llm_help>%Now% give DateTime.Now object
 use object and properties, e.g. %user.name% instead of creating new variable unless needed
 NEVER create new %variable% unless needed<llm_help>
-
 - set %name% = "John Johnsson"
 <llm_help>variables C# objects. You can use Properties and Methods on the objects<llm_help>
 - write out "%name.ToLower()% - %name.Length%"
 <llm_help>string and %variable% can be combined<llm_help>
 - write out "This is %name% and we are at %address.city% and today is %Now.ToString("d")%"
-
 <llm_help>select statements with 1 row return will load columns into variables, e.g.<llm_help>
 - select name from users where id=%id%, return 1 row
 - write out %name%
-
 <llm_help>BAD code<llm_help>
 - set %searchName% = %name%
 - select * from users where name=%searchName%, write to %users%
-
 <llm_help>GOOD code<llm_help>
 - select * from users where name=%name%, write to %users%
-
 <llm_help>List<llm_help>
 - append %name% to %names% list
 <llm_help> Dictionary <llm_help>
@@ -198,6 +211,30 @@ Setup
 - create table items, columns: name(string, not null)
 #### Setup.goal (create database structure) ####
 
+#### Error ####
+<llm_help>
+Each step can handle a error that can accure on that step, this is done by using 'on error ...., call HandleSomeError' where the HandleSomeError goal is a goal that handles the error in some way. Maybe just write it out. If error is handled on the step, the goal continues to run the next step unless then goal trhows that error, an %!error% variable is sent to the goal that handles the error.
+
+on error is optional and should only be used when we know how to handle the error
+dont add on error unless must, let the user define the error handling
+<llm_help>
+DoGetRequest
+- get http://example.org, write to %response%
+    on error call HandleError
+- write out "this step will run since HandleError doesnt throw the error"
+
+HandleError
+- write out %!error%
+
+DoGetRequestWithTimeout
+- get http://example.org, write to %response%
+    on error message 'timeout' call HandleTimeoutError
+- write out "this step will run since HandleError doesnt throw the error"
+
+HandleTimeoutError
+- write out "We had a timeout"
+- throw %!error%
+#### Error ####
 
 #### Events ####
 Events
@@ -342,4 +379,7 @@ Search
 - select * from products where name LIKE \%%q%\%, write to %products%
 <llm_help>when render is not written to a variable, it is written straight to output stream. This allows us to skip the write out command<llm_help>
 - render "/ui/Products.html"
+
+
+
 ### Example of a simple plang window app ###
